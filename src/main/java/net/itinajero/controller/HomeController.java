@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,8 +18,13 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import net.itinajero.model.Perfil;
 import net.itinajero.model.Usuario;
 import net.itinajero.model.Vacante;
@@ -34,11 +43,32 @@ public class HomeController {
 	@Autowired
    	private IUsuariosService serviceUsuarios;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@GetMapping("/")
 	public String mostrarHome(Model model) {
 		return "home";
 	}
-	
+	@GetMapping("/index")
+	public String mostrarIndex(Authentication auth,HttpSession session) {
+		String username=auth.getName();
+		System.out.println("Nombre del Usuario : "+username);
+		
+		for( GrantedAuthority rol:  auth.getAuthorities()) {
+			System.out.println("Rol : "+rol.getAuthority());
+		}
+		
+		
+		if(session.getAttribute("usuario")==null) {
+			Usuario usuario=serviceUsuarios.buscarPorUsername(username);
+			usuario.setPassword(null);
+			System.out.println("Usuario : "+usuario);
+			session.setAttribute("usuario", usuario);
+		}
+		
+		return "redirect:/";
+	}
 	@GetMapping("/signup")
 	public String registrarse(Usuario usuario) {
 		return "formRegistro";
@@ -46,6 +76,9 @@ public class HomeController {
 	
 	@PostMapping("/signup")
 	public String guardarRegistro(Usuario usuario, BindingResult result,RedirectAttributes attributes) {
+		String pwdPlano=usuario.getPassword();
+		String pwdEncriptado=passwordEncoder.encode(pwdPlano);
+		usuario.setPassword(pwdEncriptado);
 		try {
 			
 			if (result.hasErrors()) {
@@ -115,6 +148,27 @@ public class HomeController {
 		model.addAttribute("empleos", lista);
 		
 		return "listado";
+	}
+	
+	@GetMapping("/login" )
+	public String mostrarLogin() {
+	return "formLogin";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request){
+	SecurityContextLogoutHandler logoutHandler =
+	new SecurityContextLogoutHandler();
+	logoutHandler.logout(request, null, null);
+	return "redirect:/login";
+	}
+
+	
+	@GetMapping("/bcrypt/{texto}")
+	@ResponseBody
+	public String encriptar(@PathVariable("texto") String texto) {
+		return texto+"Encriptado en Bcryp : " + passwordEncoder.encode(texto);
+		
 	}
 	@GetMapping("/search")
 	public String buscar(@ModelAttribute("search") Vacante vacante,Model model) {

@@ -20,6 +20,7 @@
 </head>
 
 <body>
+<header th:insert="fragments/menu :: menu-principal"></header>
 	<header>
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 			<a class="navbar-brand" href="#">EmpleosApp</a>
@@ -35,10 +36,8 @@
 				    <li class="nav-item"><a class="nav-link active" href="/vacantes/indexPaginate">Vacantes</a>
 				    <li class="nav-item"><a class="nav-link active" href="/categorias/indexPaginate">Categorias</a>
 					</li>
-					<li class="nav-item"><a class="nav-link active" href="#">Inicio</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="#">Menu 1</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Menu 2</a></li>
+					
+					
 				</ul>
 				<a class="btn btn-primary" href="#">Ingresar</a>&nbsp; <a
 					class="btn btn-primary" href="#">Registrarse</a>

@@ -13,6 +13,6 @@ public interface IUsuariosService{
 	void guardar(Usuario usuario);
 	void eliminar(int idUsuario);
 	List<Usuario>buscarTodos();
-	
+	Usuario buscarPorUsername(String username);
 
 }
