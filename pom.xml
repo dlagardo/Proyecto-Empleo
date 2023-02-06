@@ -12,7 +12,7 @@
 			MYSQL 8.0
 			JAVA 17 LTS (Long Term Support - Soporte a Largo plazo)
 			UBUNTU SERVER 22.04 LTS (Long Term Support - Soporte a Largo plazo)   
-	-->	
+	-->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -22,11 +22,13 @@
 	
 	<groupId>net.itinajero</groupId>
 	<artifactId>empleos</artifactId>
-	<version>0.0.13-SNAPSHOT</version>
+	<version>0.0.14-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
 	<name>empleos</name>
 	<description>Aplicacion para publicar ofertas de trabajo</description>
 
-	<properties>
+	<properties>		
 		<java.version>17</java.version>
 	</properties>
 
@@ -34,11 +36,17 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>		
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>	
+		<!-- Requerido para trabajar con Spring Data JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -48,26 +56,26 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>		
-		<!--Requerido para trabajar Spring Security -->
+		<!-- Add support form automatic reloading -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>		
-		<!--Requerido para trabajar Thymeleaf Spring Security Tags -->
+			<artifactId>spring-boot-devtools</artifactId>			
+		</dependency>			
+		<!-- Requerido para trabajar Thymeleaf Spring Security Tags -->		
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
-		</dependency>
+		</dependency>	
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.0</version>
+</dependency>			
+		<!-- Requerido para trabajar Spring Security -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>	        
 	</dependencies>
 
 	<build>

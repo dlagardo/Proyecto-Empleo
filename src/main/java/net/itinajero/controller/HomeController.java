@@ -76,18 +76,13 @@ public class HomeController {
 	
 	@PostMapping("/signup")
 	public String guardarRegistro(Usuario usuario, BindingResult result,RedirectAttributes attributes) {
-		String pwdPlano=usuario.getPassword();
-		String pwdEncriptado=passwordEncoder.encode(pwdPlano);
-		usuario.setPassword(pwdEncriptado);
-		try {
-			
-			if (result.hasErrors()) {
-				return "usuarios/formRegistro";
-			}		
-			
-			// la logica restante
-	 
-			
+		
+			// Recuperamos el password en texto plano
+			String pwdPlano = usuario.getPassword();
+			// Encriptamos el pwd BCryptPasswordEncoder
+			String pwdEncriptado = passwordEncoder.encode(pwdPlano); 
+			// Hacemos un set al atributo password (ya viene encriptado)
+			usuario.setPassword(pwdEncriptado);	
 			usuario.setEstatus(1); // Activado por defecto
 			usuario.setFechaRegistro(new Date()); // Fecha de Registro, la fecha actual del servidor
 			
@@ -101,17 +96,9 @@ public class HomeController {
 			 */
 			serviceUsuarios.guardar(usuario);
 					
-			attributes.addFlashAttribute("msg", "El registro fue guardado correctamente!");
+			attributes.addFlashAttribute("msg", "Has sido registrado. ¡Ahora puedes ingresar al sistema!");
 			
-			return "redirect:/usuarios/index";
-			
-			// 							
-			
-			
-		}catch(Exception ex) {
-			attributes.addFlashAttribute("msg", "Ocurrio un error durante la operación. " + ex.getMessage());
-		}
-		return "redirect:/usuarios/index";
+			return "redirect:/login";
 	}
 		
 		
@@ -183,6 +170,7 @@ public class HomeController {
 		model.addAttribute("vacantes",lista);
 		return "home";
 	}
+	
 	
 	@InitBinder //para string si lo detecta vacio en el data binding lo setea a null
 	public void initBinder(WebDataBinder binder) {

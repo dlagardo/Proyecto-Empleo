@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import net.itinajero.model.Categoria;
-import net.itinajero.model.Vacante;
+
 import net.itinajero.repository.CategoriaRepositorio;
 import net.itinajero.service.ICategoriasService;
 

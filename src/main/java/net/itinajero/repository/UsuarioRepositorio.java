@@ -2,13 +2,27 @@ package net.itinajero.repository;
 
 import java.util.List;
 
-
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
+import org.springframework.data.repository.query.Param;
 
 import net.itinajero.model.Usuario;
 
 
 public interface UsuarioRepositorio extends JpaRepositoryImplementation<Usuario, Integer> {
 
-	Usuario findByUsername(String username);
+	
+
+	// Buscar usuario por username
+		Usuario findByUsername(String username);
+		List<Usuario> findByFechaRegistroNotNull();
+		
+		@Modifying
+	    @Query("UPDATE Usuario u SET u.estatus=0 WHERE u.id = :paramIdUsuario")
+	    int lock(@Param("paramIdUsuario") int idUsuario);
+		
+		@Modifying
+	    @Query("UPDATE Usuario u SET u.estatus=1 WHERE u.id = :paramIdUsuario")
+	    int unlock(@Param("paramIdUsuario") int idUsuario);
 }
